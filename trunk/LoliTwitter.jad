@@ -1,0 +1,8 @@
+MIDlet-1: LoliTwitter, icon.png, LoliTwitter
+MIDlet-Jar-Size: 69845
+MIDlet-Jar-URL: LoliTwitter.jar
+MIDlet-Name: LoliTwitter
+MIDlet-Icon: /icon.png
+MIDlet-Vendor: Pruet Boonma
+MIDlet-Version: 0.1.0
+MIDlet-Description: LoliTwitter - Twitter Clienter for Thai
