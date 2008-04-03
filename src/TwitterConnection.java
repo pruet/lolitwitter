@@ -41,7 +41,8 @@ class TwitterConnection {
 	TwitterConnection(String u, String p) {
 		user = u;
 		password = p;
-		ua = "Profile/" + System.getProperty("microedition.profiles") + " Configuration/" + System.getProperty("microedition.configuration");
+//		ua = "LoliTwitter/0.1.0 (j2me)" + " Profile/" + System.getProperty("microedition.profiles") + " Configuration/" + System.getProperty("microedition.configuration");
+		ua = "curl/7.18.0 (i486-pc-linux-gnu) libcurl/7.18.0 OpenSSL/0.9.8g zlib/1.2.3.3 libidn/1.1";
 		recenturl = "http://twitter.com/statuses/friends_timeline.xml";
 		submiturl = "http://twitter.com/statuses/update.xml";
 	}
@@ -81,24 +82,20 @@ class TwitterConnection {
 		while (con == null) {
 			con = (HttpConnection)Connector.open(url);
 			con.setRequestMethod(HttpConnection.POST);
-			con.setRequestProperty("User-Agent", ua);
-			String locale = System.getProperty("microedition.locale");
-			if (locale == null) {
-				locale = "th-TH";
-			}
-			con.setRequestProperty("Accept-Language", locale);
-			con.setRequestProperty("Content-Length", "" + len);
-			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			con.setRequestProperty("Accept", "text/plain");
-			if(!lastUpdate.equals("")) {
-				//con.setRequestProperty("If-Modified-Since", lastUpdate);
-			}
 			if (user != null && password != null) {
 				con.setRequestProperty("Authorization", "Basic " +  BasicAuth.encode(user, password));
 			}
+			con.setRequestProperty("User-Agent", ua);
+			con.setRequestProperty("Host", con.getHost()+":"+con.getPort());
+			con.setRequestProperty("Accept", "*/*");
+			con.setRequestProperty("Content-Length", "" + len);
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			if(!lastUpdate.equals("")) {
+				//con.setRequestProperty("If-Modified-Since", lastUpdate);
+			}
 
 			os = con.openOutputStream();
-			//System.out.println(url + ":" + msg + ":" + len);
+			System.out.println(url + ":" + msg + ":" + len);
 			if(msg.length() > 0) {
 				os.write(msg.getBytes());
 			}
@@ -106,7 +103,7 @@ class TwitterConnection {
 			os = null;
 
 			status = con.getResponseCode();
-			//System.out.println("responscode = " + status);
+			System.out.println("responscode = " + status);
 			switch (status) {
 			case HttpConnection.HTTP_OK:
 				break;
@@ -114,14 +111,12 @@ class TwitterConnection {
 			case HttpConnection.HTTP_MOVED_TEMP:
 			case HttpConnection.HTTP_MOVED_PERM:
 				url = con.getHeaderField("location");
-				os.close();
-				os = null;
 				con.close();
 				con = null;
 				break;
 			default:
-				os.close();
 				con.close();
+				con = null;
 				throw new IOException("Response status not OK:" + status);
 			}
 		}
@@ -133,7 +128,7 @@ class TwitterConnection {
 		StringBuffer stb = new StringBuffer();
 		int ch = 0;
 		try {
-			sendRequest("status=" + msg, submiturl);
+			sendRequest("status=" + URLencode(msg), submiturl);
 			lastUpdate = con.getHeaderField("Date");
 			int n = (int)con.getLength();
 			if(n != -1) {
