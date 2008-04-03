@@ -1,0 +1,15 @@
+MIDlet-1: LoliTwitter, icon.png, LoliTwitter
+MIDlet-Name: LoliTwitter
+MIDlet-Icon: /icon.png
+MIDlet-Vendor: Pruet Boonma
+MIDlet-Version: 0.1.0
+MIDlet-Description: Twitter Client for Thai
+MicroEdition-Configuration: CLDC-1.0
+MicroEdition-Profile: MIDP-1.0
+MPP-Width: 176
+MPP-Height: 208
+MPP-Scale: 2.0
+MPP-Antialias: false
+MPP-Info-URL-Label: LoliTwitter's Website
+
+
