@@ -1,0 +1,1 @@
+LoliTwitter is a J2ME Twitter client with Thai font rendering capability. This capability allow Thai to update their Twitter status and view recent status of the others using Thai characters.
